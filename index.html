@@ -769,15 +769,7 @@
           return;
         }
       } catch (e) {
-        // Fallback when previewing locally without Netlify Functions
-        if (candidatePin === "1307") {
-          ownerPin = candidatePin;
-          localStorage.setItem(LOCAL_PIN_KEY, ownerPin);
-          closeModal("pinModal");
-          updateOwnerUI();
-          showToast("Unlocked (Local preview mode)");
-          return;
-        }
+        // Network error: the PIN can only be verified by the server.
       }
       pinBuffer = "";
       renderPinDots();

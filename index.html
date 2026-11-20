@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>The ₹20 Bank</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="The ₹20 Bank" />
+  <meta name="theme-color" content="#fdf8f5" />
+  <style>
+    :root {
+      --bg: #fdf8f5;
+      --card: #ffffff;
+      --butter: #fef3c7;
+      --butter-border: #fde68a;
+      --lavender: #ede9fe;
+      --lavender-border: #ddd6fe;
+      --mint: #d1fae5;
+      --mint-border: #a7f3d0;
+      --blush: #ffe4e6;
+      --blush-border: #fecdd3;
+      --sky: #e0f2fe;
+      --text: #2d2a32;
+      --muted: #6e6a75;
+      --accent: #7c3aed;
+      --danger: #e11d48;
+      --success: #059669;
+      --radius: 18px;
+      --shadow: 0 6px 20px rgba(45, 42, 50, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 90px;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Header */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #fde68a, #ddd6fe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .sync-pill {
+      font-size: 11px;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+    }
+    .dot.offline { background: #f59e0b; }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-pill {
+      border: 1px solid var(--lavender-border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .btn-pill.unlocked {
+      background: var(--mint);
+      border-color: var(--mint-border);
+      color: #065f46;
+    }
+
+    .owner-only {
+      display: none !important;
+    }
+    body.is-owner .owner-only {
+      display: inline-flex !important;
+    }
+    body.is-owner .owner-block {
+      display: block !important;
+    }
+    .owner-block {
+      display: none !important;
+    }
+
+    /* Hero Vault Card */
+    .hero-card {
+      background: linear-gradient(135deg, var(--butter), var(--lavender));
+      border: 1px solid var(--butter-border);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .hero-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--muted);
+    }
+
+    .hero-amount {
+      font-size: 38px;
+      font-weight: 900;
+      margin: 4px 0;
+      letter-spacing: -1px;
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Section Header */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0 10px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .count-badge {
+      background: var(--blush);
+      color: var(--danger);
+      border: 1px solid var(--blush-border);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 15px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(45, 42, 50, 0.06);
+    }
+
+    .defaulter-card {
+      background: linear-gradient(to right, #fff, #fff7f8);
+      border-color: var(--blush-border);
+    }
+
+    .friend-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .friend-name {
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .custom-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--lavender);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .edit-tag-btn {
+      background: none;
+      border: none;
+      padding: 0 2px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .owed-pill {
+      text-align: right;
+    }
+
+    .owed-amount {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--danger);
+    }
+
+    .owed-favours {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 9px 13px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-mint {
+      background: var(--mint);
+      color: #065f46;
+      border: 1px solid var(--mint-border);
+    }
+
+    .btn-soft {
+      background: var(--sky);
+      color: #0369a1;
+    }
+
+    .btn-blush {
+      background: var(--blush);
+      color: var(--danger);
+    }
+
+    /* Credit Score Meter */
+    .score-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .score-num {
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .meter-track {
+      width: 100%;
+      height: 9px;
+      background: #f1eff5;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .meter-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .score-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Ledger */
+    .ledger-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid #f3f0f7;
+      gap: 10px;
+    }
+    .ledger-item:last-child { border-bottom: none; }
+
+    .ledger-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .ledger-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .empty-box {
+      text-align: center;
+      padding: 24px 16px;
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px dashed var(--lavender-border);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 27, 38, 0.45);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card);
+      width: 100%;
+      max-width: 390px;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .modal h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .modal p {
+      margin: 0 0 14px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #dfdbe6;
+      font-size: 15px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+
+    .chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .chip {
+      background: var(--lavender);
+      border: 1px solid var(--lavender-border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 14px 0 18px;
+    }
+
+    .pin-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: transparent;
+    }
+    .pin-dot.filled {
+      background: var(--accent);
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .key-btn {
+      padding: 14px;
+      font-size: 18px;
+      font-weight: 800;
+      border-radius: 14px;
+      border: 1px solid #ece8f2;
+      background: #faf8fc;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .key-btn:active { background: var(--lavender); }
+
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 200;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top Header -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo-badge">₹20</div>
+        <div>
+          <h1>The ₹20 Bank</h1>
+          <div class="sync-pill">
+            <span class="dot" id="syncDot"></span>
+            <span id="syncLabel">Connecting live vault...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn-pill owner-only" onclick="openModal('guideModal')" title="Owner Guide">📖 Guide</button>
+        <button class="btn-pill" id="lockBtn" onclick="handleLockTap()">🔒 Owner</button>
+      </div>
+    </div>
+
+    <!-- Total Vault Hero -->
+    <div class="hero-card">
+      <div class="hero-label">Total Unpaid Favours</div>
+      <div class="hero-amount" id="totalOwed">₹0</div>
+      <div class="hero-sub">
+        <span id="totalFavoursText">0 active ₹20 favours</span>
+        <button class="btn btn-primary owner-only" onclick="openModal('addFriendModal')">+ Add Friend</button>
+      </div>
+    </div>
+
+    <!-- Defaulters Section -->
+    <div class="section-head">
+      <h2>🚨 Defaulters</h2>
+      <span class="count-badge" id="defaulterCount">0 Defaulters</span>
+    </div>
+    <div id="defaultersList"></div>
+
+    <!-- Friendship Credit Score Section -->
+    <div class="section-head">
+      <h2>💳 Friendship Credit Score</h2>
+      <span style="font-size:12px;color:var(--muted);font-weight:600;">300 – 900 Scale</span>
+    </div>
+    <div id="creditList"></div>
+
+    <!-- Bank Ledger -->
+    <div class="section-head">
+      <h2>🧾 Bank Ledger</h2>
+      <div style="display:flex;gap:6px;">
+        <button class="btn-pill" onclick="syncFromServer(true)">↻ Refresh</button>
+        <button class="btn-pill owner-only" onclick="undoLast()">↩ Undo</button>
+      </div>
+    </div>
+    <div class="card" id="ledgerBox"></div>
+  </div>
+
+  <!-- PIN Modal -->
+  <div class="modal-backdrop" id="pinModal">
+    <div class="modal" style="text-align:center;">
+      <h3>Owner Vault Access</h3>
+      <p id="pinHint">Enter your 4-digit Owner PIN to unlock edits.</p>
+      <div class="pin-dots" id="pinDots">
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+      </div>
+      <div class="keypad">
+        <button class="key-btn" onclick="pressPin('1')">1</button>
+        <button class="key-btn" onclick="pressPin('2')">2</button>
+        <button class="key-btn" onclick="pressPin('3')">3</button>
+        <button class="key-btn" onclick="pressPin('4')">4</button>
+        <button class="key-btn" onclick="pressPin('5')">5</button>
+        <button class="key-btn" onclick="pressPin('6')">6</button>
+        <button class="key-btn" onclick="pressPin('7')">7</button>
+        <button class="key-btn" onclick="pressPin('8')">8</button>
+        <button class="key-btn" onclick="pressPin('9')">9</button>
+        <button class="key-btn" onclick="closeModal('pinModal')" style="font-size:14px;">Cancel</button>
+        <button class="key-btn" onclick="pressPin('0')">0</button>
+        <button class="key-btn" onclick="backspacePin()">⌫</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Friend Modal -->
+  <div class="modal-backdrop" id="addFriendModal">
+    <div class="modal">
+      <h3>Add New Account Holder</h3>
+      <p>Open a ₹20 credit line for a friend.</p>
+      <input class="input" id="newFriendName" placeholder="Friend's name" />
+      <input class="input" id="newFriendTag" placeholder="Custom tag (e.g. Chai Sponsor, Late Always)" />
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn btn-soft" onclick="closeModal('addFriendModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="addFriend()">Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charge +₹20 Modal -->
+  <div class="modal-backdrop" id="chargeModal">
+    <div class="modal">
+      <h3 id="chargeTitle">Charge +₹20</h3>
+      <p>Pick a funny reason or type your own note.</p>
+      <div class="chip-wrap">
+        <span class="chip" onclick="setReason('Emotional support')">🫂 Emotional support</span>
+        <span class="chip" onclick="setReason('Urgent favour')">⚡ Urgent favour</span>
+        <span class="chip" onclick="setReason('Saved from awkwardness')">🛟 Saved from awkwardness</span>
+        <span class="chip" onclick="setReason('Chai / snack tax')">☕ Chai / snack tax</span>
+        <span class="chip" onclick="setReason('Listening to rant')">🎧 Listening to rant</span>
+        <span class="chip" onclick="setReason('VIP advice')">🧠 VIP advice</span>
+      </div>
+      <input class="input" id="chargeReason" placeholder="Reason for ₹20 charge..." />
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn btn-soft" onclick="closeModal('chargeModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="confirmCharge()">Add +₹20</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Tag Modal -->
+  <div class="modal-backdrop" id="editTagModal">
+    <div class="modal">
+      <h3 id="editTagTitle">Edit Friend Tag</h3>
+      <p>Customize the badge shown under their name.</p>
+      <input class="input" id="editTagInput" placeholder="e.g. Serial Defaulter, VIP Bestie" />
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn btn-soft" onclick="closeModal('editTagModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveFriendTag()">Save Tag</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner Guide & Backup Modal -->
+  <div class="modal-backdrop" id="guideModal">
+    <div class="modal">
+      <h3>📖 Owner Guide & Backup</h3>
+      <p>
+        <strong>1. iPhone App Icon:</strong> Open this link in Safari → tap <b>Share</b> → <b>Add to Home Screen</b>.<br/>
+        <strong>2. Live Cloud Sync:</strong> Connected automatically via Netlify Function (<code>/.netlify/functions/bank</code>) using your environment variables.<br/>
+        <strong>3. Viewers:</strong> Friends opening the link see live updates automatically without needing any setup or keys.
+      </p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <button class="btn btn-mint" onclick="exportBackup()">⬇ Export JSON</button>
+        <label class="btn btn-soft" style="cursor:pointer;">
+          ⬆ Import JSON
+          <input type="file" accept=".json" onchange="importBackup(event)" style="display:none;" />
+        </label>
+      </div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="btn btn-primary" onclick="closeModal('guideModal')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_ENDPOINT = "/.netlify/functions/bank";
+    const LOCAL_DATA_KEY = "twenty_bank_data_v3";
+    const LOCAL_PIN_KEY = "twenty_bank_verified_pin_v3";
+
+    let state = { friends: [], history: [] };
+    let ownerPin = sessionStorage.getItem(LOCAL_PIN_KEY) || localStorage.getItem(LOCAL_PIN_KEY) || "";
+    let pinBuffer = "";
+    let activeFriendId = null;
+
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add("open");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    function setSyncStatus(isOnline, text) {
+      const dot = document.getElementById("syncDot");
+      const label = document.getElementById("syncLabel");
+      dot.className = isOnline ? "dot" : "dot offline";
+      label.textContent = text;
+    }
+
+    function updateOwnerUI() {
+      const isOwner = Boolean(ownerPin);
+      document.body.classList.toggle("is-owner", isOwner);
+      const lockBtn = document.getElementById("lockBtn");
+      if (isOwner) {
+        lockBtn.textContent = "🔓 Unlocked";
+        lockBtn.classList.add("unlocked");
+      } else {
+        lockBtn.textContent = "🔒 Owner";
+        lockBtn.classList.remove("unlocked");
+      }
+      render();
+    }
+
+    function handleLockTap() {
+      if (ownerPin) {
+        ownerPin = "";
+        localStorage.removeItem(LOCAL_PIN_KEY);
+        sessionStorage.removeItem(LOCAL_PIN_KEY);
+        updateOwnerUI();
+        showToast("Vault locked (Viewer mode)");
+      } else {
+        pinBuffer = "";
+        renderPinDots();
+        document.getElementById("pinHint").textContent = "Enter your 4-digit Owner PIN to unlock edits.";
+        openModal("pinModal");
+      }
+    }
+
+    function renderPinDots() {
+      const dots = document.querySelectorAll("#pinDots .pin-dot");
+      dots.forEach((d, idx) => d.classList.toggle("filled", idx < pinBuffer.length));
+    }
+
+    function pressPin(digit) {
+      if (pinBuffer.length >= 4) return;
+      pinBuffer += digit;
+      renderPinDots();
+      if (pinBuffer.length === 4) {
+        verifyPinWithServer(pinBuffer);
+      }
+    }
+
+    function backspacePin() {
+      pinBuffer = pinBuffer.slice(0, -1);
+      renderPinDots();
+    }
+
+    async function verifyPinWithServer(candidatePin) {
+      document.getElementById("pinHint").textContent = "Verifying PIN...";
+      try {
+        const res = await fetch(API_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-owner-pin": candidatePin,
+          },
+          body: JSON.stringify({ action: "verify_pin", pin: candidatePin }),
+        });
+
+        if (res.ok) {
+          ownerPin = candidatePin;
+          localStorage.setItem(LOCAL_PIN_KEY, ownerPin);
+          sessionStorage.setItem(LOCAL_PIN_KEY, ownerPin);
+          closeModal("pinModal");
+          updateOwnerUI();
+          showToast("Owner mode unlocked");
+          return;
+        }
+
+        if (res.status === 401) {
+          pinBuffer = "";
+          renderPinDots();
+          document.getElementById("pinHint").textContent = "Wrong PIN. Try again.";
+          return;
+        }
+      } catch (e) {
+        // Fallback when previewing locally without Netlify Functions
+        if (candidatePin === "1307") {
+          ownerPin = candidatePin;
+          localStorage.setItem(LOCAL_PIN_KEY, ownerPin);
+          closeModal("pinModal");
+          updateOwnerUI();
+          showToast("Unlocked (Local preview mode)");
+          return;
+        }
+      }
+      pinBuffer = "";
+      renderPinDots();
+      document.getElementById("pinHint").textContent = "Could not verify PIN.";
+    }
+
+    async function syncFromServer(manual = false) {
+      try {
+        const res = await fetch(API_ENDPOINT, { cache: "no-store" });
+        if (!res.ok) throw new Error("Server returned " + res.status);
+        const data = await res.json();
+        state = {
+          friends: Array.isArray(data.friends) ? data.friends : [],
+          history: Array.isArray(data.history) ? data.history : [],
+        };
+        localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify(state));
+        setSyncStatus(true, "Live synced");
+        render();
+        if (manual) showToast("Vault refreshed");
+      } catch (err) {
+        const cached = localStorage.getItem(LOCAL_DATA_KEY);
+        if (cached) {
+          try { state = JSON.parse(cached); } catch {}
+        }
+        setSyncStatus(false, "Offline / local cache");
+        render();
+        if (manual) showToast("Using cached data");
+      }
+    }
+
+    async function saveToServer() {
+      localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify(state));
+      render();
+      if (!ownerPin) return;
+
+      setSyncStatus(true, "Saving...");
+      try {
+        const res = await fetch(API_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-owner-pin": ownerPin,
+          },
+          body: JSON.stringify({ pin: ownerPin, data: state }),
+        });
+        if (res.status === 401) {
+          ownerPin = "";
+          localStorage.removeItem(LOCAL_PIN_KEY);
+          updateOwnerUI();
+          showToast("Session expired — please unlock again");
+          return;
+        }
+        if (!res.ok) throw new Error("Save failed");
+        setSyncStatus(true, "Live synced");
+      } catch (err) {
+        setSyncStatus(false, "Saved locally (sync pending)");
+        showToast("Saved on device; will sync when online");
+      }
+    }
+
+    function addFriend() {
+      const nameInput = document.getElementById("newFriendName");
+      const tagInput = document.getElementById("newFriendTag");
+      const name = nameInput.value.trim();
+      const tag = tagInput.value.trim();
+      if (!name) {
+        showToast("Enter a friend's name");
+        return;
+      }
+      state.friends.push({
+        id: "f_" + Date.now(),
+        name,
+        tag: tag || "Account Holder",
+        unpaid: 0,
+        settled: 0,
+      });
+      nameInput.value = "";
+      tagInput.value = "";
+      closeModal("addFriendModal");
+      saveToServer();
+      showToast(name + " added to The ₹20 Bank");
+    }
+
+    function openChargeModal(friendId) {
+      const friend = state.friends.find((f) => f.id === friendId);
+      if (!friend) return;
+      activeFriendId = friendId;
+      document.getElementById("chargeTitle").textContent = "Charge " + friend.name + " +₹20";
+      document.getElementById("chargeReason").value = "";
+      openModal("chargeModal");
+    }
+
+    function setReason(text) {
+      document.getElementById("chargeReason").value = text;
+    }
+
+    function confirmCharge() {
+      const friend = state.friends.find((f) => f.id === activeFriendId);
+      if (!friend) return;
+      const reason = document.getElementById("chargeReason").value.trim() || "Official ₹20 favour";
+      friend.unpaid = (friend.unpaid || 0) + 1;
+      state.history.unshift({
+        id: "h_" + Date.now(),
+        friendId: friend.id,
+        friendName: friend.name,
+        type: "charge",
+        reason,
+        time: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      });
+      closeModal("chargeModal");
+      saveToServer();
+      showToast("+₹20 added for " + friend.name);
+    }
+
+    function settleOne(friendId) {
+      const friend = state.friends.find((f) => f.id === friendId);
+      if (!friend || (friend.unpaid || 0) <= 0) return;
+      friend.unpaid -= 1;
+      friend.settled = (friend.settled || 0) + 1;
+      state.history.unshift({
+        id: "h_" + Date.now(),
+        friendId: friend.id,
+        friendName: friend.name,
+        type: "settle",
+        reason: "Settled one ₹20 favour",
+        time: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      });
+      saveToServer();
+      showToast("Settled ₹20 for " + friend.name);
+    }
+
+    function openEditTag(friendId) {
+      const friend = state.friends.find((f) => f.id === friendId);
+      if (!friend) return;
+      activeFriendId = friendId;
+      document.getElementById("editTagTitle").textContent = "Tag for " + friend.name;
+      document.getElementById("editTagInput").value = friend.tag || "";
+      openModal("editTagModal");
+    }
+
+    function saveFriendTag() {
+      const friend = state.friends.find((f) => f.id === activeFriendId);
+      if (!friend) return;
+      friend.tag = document.getElementById("editTagInput").value.trim() || "Account Holder";
+      closeModal("editTagModal");
+      saveToServer();
+      showToast("Tag updated");
+    }
+
+    function undoLast() {
+      const last = state.history.shift();
+      if (!last) {
+        showToast("Nothing to undo");
+        return;
+      }
+      const friend = state.friends.find((f) => f.id === last.friendId);
+      if (friend) {
+        if (last.type === "charge" && friend.unpaid > 0) friend.unpaid -= 1;
+        if (last.type === "settle" && friend.settled > 0) {
+          friend.settled -= 1;
+          friend.unpaid += 1;
+        }
+      }
+      saveToServer();
+      showToast("Undid last entry");
+    }
+
+    function computeCreditScore(friend) {
+      const unpaid = friend.unpaid || 0;
+      const settled = friend.settled || 0;
+      let score = 750 + settled * 25 - unpaid * 55;
+      score = Math.max(300, Math.min(900, score));
+      let status = "Good Standing";
+      let color = "#10b981";
+      if (score >= 800) { status = "Platinum Bestie"; color = "#7c3aed"; }
+      else if (score >= 700) { status = "Good Standing"; color = "#10b981"; }
+      else if (score >= 550) { status = "On Watchlist"; color = "#f59e0b"; }
+      else { status = "Loan Denied"; color = "#e11d48"; }
+      return { score, status, color };
+    }
+
+    function shareReminder(friendId) {
+      const friend = state.friends.find((f) => f.id === friendId);
+      if (!friend) return;
+      const amount = (friend.unpaid || 0) * 20;
+      const msg = `🏦 The ₹20 Bank Notice: Hey ${friend.name}, you currently have ${friend.unpaid} unpaid favour(s) = ₹${amount}. Kindly clear your dues!`;
+      copyOrShare(msg);
+    }
+
+    function shareCreditReport(friendId) {
+      const friend = state.friends.find((f) => f.id === friendId);
+      if (!friend) return;
+      const { score, status } = computeCreditScore(friend);
+      const msg = `💳 The ₹20 Bank Credit Report — ${friend.name}: ${score}/900 (${status}). Unpaid: ₹${(friend.unpaid || 0) * 20} | Settled: ${friend.settled || 0} favours.`;
+      copyOrShare(msg);
+    }
+
+    function copyOrShare(text) {
+      if (navigator.share) {
+        navigator.share({ text }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+        showToast("Copied to clipboard!");
+      }
+    }
+
+    function exportBackup() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "the-20-bank-backup.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (Array.isArray(parsed.friends)) {
+            state = {
+              friends: parsed.friends,
+              history: Array.isArray(parsed.history) ? parsed.history : [],
+            };
+            saveToServer();
+            showToast("Backup restored");
+          }
+        } catch {
+          showToast("Invalid backup file");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function render() {
+      const totalFavours = state.friends.reduce((sum, f) => sum + (f.unpaid || 0), 0);
+      document.getElementById("totalOwed").textContent = "₹" + totalFavours * 20;
+      document.getElementById("totalFavoursText").textContent =
+        `${totalFavours} active ₹20 favour${totalFavours === 1 ? "" : "s"}`;
+
+      // Defaulters Section (only unpaid > 0)
+      const defaulters = state.friends
+        .filter((f) => (f.unpaid || 0) > 0)
+        .sort((a, b) => (b.unpaid || 0) - (a.unpaid || 0));
+
+      document.getElementById("defaulterCount").textContent =
+        `${defaulters.length} Defaulter${defaulters.length === 1 ? "" : "s"}`;
+
+      const defaultersEl = document.getElementById("defaultersList");
+      if (defaulters.length === 0) {
+        defaultersEl.innerHTML = `<div class="empty-box">🎉 Zero Defaulters! Everyone has cleared their ₹20 tab.</div>`;
+      } else {
+        defaultersEl.innerHTML = defaulters
+          .map((f, idx) => `
+            <div class="card defaulter-card">
+              <div class="friend-row">
+                <div>
+                  <div class="friend-name">${idx === 0 ? "👑 " : ""}${escapeHtml(f.name)}</div>
+                  <div class="custom-tag">
+                    <span>${escapeHtml(f.tag || "Account Holder")}</span>
+                    <button class="edit-tag-btn owner-only" onclick="openEditTag('${f.id}')" title="Edit tag">✏️</button>
+                  </div>
+                </div>
+                <div class="owed-pill">
+                  <div class="owed-amount">₹${f.unpaid * 20}</div>
+                  <div class="owed-favours">${f.unpaid} × ₹20</div>
+                </div>
+              </div>
+              <div class="action-row">
+                <button class="btn btn-primary owner-only" onclick="openChargeModal('${f.id}')">+ ₹20</button>
+                <button class="btn btn-mint owner-only" onclick="settleOne('${f.id}')">✓ Settle ₹20</button>
+                <button class="btn btn-soft" onclick="shareReminder('${f.id}')">📤 Remind</button>
+              </div>
+            </div>
+          `)
+          .join("");
+      }
+
+      // Friendship Credit Score Section
+      const creditEl = document.getElementById("creditList");
+      if (state.friends.length === 0) {
+        creditEl.innerHTML = `<div class="empty-box">No accounts yet. Unlock Owner mode to add friends.</div>`;
+      } else {
+        creditEl.innerHTML = state.friends
+          .map((f) => {
+            const { score, status, color } = computeCreditScore(f);
+            const pct = Math.round(((score - 300) / 600) * 100);
+            return `
+              <div class="card">
+                <div class="score-header">
+                  <div>
+                    <div class="friend-name">${escapeHtml(f.name)}</div>
+                    <div class="custom-tag">
+                      <span>${escapeHtml(f.tag || "Account Holder")}</span>
+                      <button class="edit-tag-btn owner-only" onclick="openEditTag('${f.id}')" title="Edit tag">✏️</button>
+                    </div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div class="score-num" style="color:${color};">${score}</div>
+                    <div style="font-size:11px;font-weight:700;color:${color};">${status}</div>
+                  </div>
+                </div>
+                <div class="meter-track">
+                  <div class="meter-fill" style="width:${pct}%;background:${color};"></div>
+                </div>
+                <div class="score-meta">
+                  <span>Settled: ${f.settled || 0}</span>
+                  <span>Unpaid: ${f.unpaid || 0} (₹${(f.unpaid || 0) * 20})</span>
+                </div>
+                <div class="action-row">
+                  <button class="btn btn-primary owner-only" onclick="openChargeModal('${f.id}')">+ ₹20</button>
+                  <button class="btn btn-soft" onclick="shareCreditReport('${f.id}')">📄 Share Score</button>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      // Bank Ledger
+      const ledgerEl = document.getElementById("ledgerBox");
+      if (state.history.length === 0) {
+        ledgerEl.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:13px;padding:10px;">No transactions recorded yet.</div>`;
+      } else {
+        ledgerEl.innerHTML = state.history
+          .slice(0, 25)
+          .map((item) => `
+            <div class="ledger-item">
+              <div>
+                <div class="ledger-title">${escapeHtml(item.friendName)} — ${escapeHtml(item.reason)}</div>
+                <div class="ledger-sub">${escapeHtml(item.time || "")}</div>
+              </div>
+              <div style="font-weight:800;font-size:14px;color:${item.type === "settle" ? "var(--success)" : "var(--danger)"};">
+                ${item.type === "settle" ? "-₹20" : "+₹20"}
+              </div>
+            </div>
+          `)
+          .join("");
+      }
+    }
+
+    // Initial boot & background polling every 12 seconds
+    updateOwnerUI();
+    syncFromServer();
+    setInterval(() => syncFromServer(false), 12000);
+  </script>
+</body>
+</html>

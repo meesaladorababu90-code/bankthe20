@@ -17,14 +17,14 @@ exports.handler = async function (event) {
 
   const binId = process.env.JSONBIN_BIN_ID;
   const masterKey = process.env.JSONBIN_MASTER_KEY;
-  const ownerPin = process.env.OWNER_PIN || "1307";
+  const ownerPin = process.env.OWNER_PIN;
 
-  if (!binId || !masterKey) {
+  if (!binId || !masterKey || !ownerPin) {
     return {
       statusCode: 500,
       headers: CORS_HEADERS,
       body: JSON.stringify({
-        error: "Missing JSONBIN_BIN_ID or JSONBIN_MASTER_KEY in Netlify environment variables.",
+        error: "Missing JSONBIN_BIN_ID, JSONBIN_MASTER_KEY, or OWNER_PIN in Netlify environment variables.",
       }),
     };
   }
